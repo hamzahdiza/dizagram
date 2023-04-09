@@ -50,6 +50,17 @@ class userController {
       next(err);
     }
   }
+
+  static async getAllUsers(req, res, next) {
+    try {
+      const currentUserId = req.params.id;
+      const dataUsers = await User.find({ _id: { $ne: currentUserId } }).select(["_id", "email", "username", "avatarImage"]);
+      res.status(200).json(dataUsers);
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
+  }
 }
 
 module.exports = userController;
