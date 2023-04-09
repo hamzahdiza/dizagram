@@ -50,23 +50,29 @@ const RegisterPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (handleValidation()) {
-      const { email, username, password } = values;
-      const { data } = await axios.post(registerApi, {
-        username,
-        email,
-        password,
-      });
+    try {
+      if (handleValidation()) {
+        const { email, username, password } = values;
+        const { data } = await axios.post(registerApi, {
+          username,
+          email,
+          password,
+        });
 
-      if (data.status === false) {
-        toast.error(data.msg, toastOptions);
-      }
-      if (data.status === true) {
         localStorage.setItem("dizagram-user", JSON.stringify(data.user));
         navigate("/");
       }
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response.data.message, toastOptions);
     }
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("dizagram-user")) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   return (
     <>

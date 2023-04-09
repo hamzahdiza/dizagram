@@ -6,13 +6,14 @@ require("dotenv").config();
 const port = process.env.PORT;
 const router = require("./routes");
 const { mongoConnect } = require("./config/mongoConnection");
+const errorHandler = require("./middleware/errorHandler");
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/", router);
-
+app.use(errorHandler);
 // (async () => {
 //   try {
 //     await mongoConnect();
